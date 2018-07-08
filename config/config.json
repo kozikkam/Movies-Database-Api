@@ -1,0 +1,32 @@
+{
+    "development": {
+        "username": "manager",
+        "password": null,
+        "database": "dev",
+        "host": "localhost",
+        "port": 5000,
+        "dialect": "sqlite",
+        "developerKey": "insert your key here",
+        "omdbapi": "http://www.omdbapi.com/"
+    },
+    "production": {
+        "username": "manager",
+        "password": null,
+        "database": "prod",
+        "host": "localhost",
+        "port": 5000,
+        "dialect": "sqlite",
+        "developerKey": "insert your key here",
+        "omdbapi": "http://www.omdbapi.com/"
+    },
+    "test": {
+        "username": "manager",
+        "password": null,
+        "database": "test",
+        "host": "localhost",
+        "port": 5000,
+        "dialect": "sqlite",
+        "developerKey": "insert your key here",
+        "omdbapi": "http://www.omdbapi.com/"
+    }
+}

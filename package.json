@@ -1,0 +1,25 @@
+{
+  "name": "movies-database",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./app.js",
+    "test": "SET NODE_ENV=test&node node_modules/mocha/bin/mocha tests/**/*Test.js"
+  },
+  "dependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "hjs": "~0.0.6",
+    "http-errors": "~1.6.2",
+    "less-middleware": "~2.2.1",
+    "mocha": "^5.2.0",
+    "morgan": "~1.9.0",
+    "nock": "^9.4.1",
+    "request-promise": "^4.2.2",
+    "sequelize": "^4.38.0",
+    "sqlite3": "^4.0.1"
+  }
+}
