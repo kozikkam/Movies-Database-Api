@@ -23,6 +23,6 @@ const db = require('./models/index');
 
 require('./routes')(app);
 
-app.listen(process.env.PORT || config["port"], () => console.log('Express server listening on port ' + config["port"]));
+app.listen(process.env.PORT || config["port"], () => console.log('Express server listening on port ' + process.env.PORT || config["port"]));
 
 module.exports = app;
