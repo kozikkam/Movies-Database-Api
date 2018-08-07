@@ -102,8 +102,11 @@ describe('Movies', () => {
                 // substract one day from updated at
                 let now = new Date();
                 db.sequelize.query(
-                    `UPDATE movies SET updatedAt='${now.getFullYear()}-${now.getMonth()}-${now.getDate()-1} 19:17:53.436 +00:00'`,
-                    null, { raw: true });
+                    'UPDATE movies SET updatedAt=?',
+                    { 
+                        raw: true,
+                        replacements: [`${now.getFullYear()}-${now.getMonth()}-${now.getDate()-1} 20:00:00.000 +00:00`]
+                });
 
                 chai.request(app)
                 .post('/movies')
