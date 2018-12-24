@@ -35,8 +35,6 @@ module.exports = {
             Object.assign(conditions, { movieId: req.query.movieId });
         }
         
-        let comments = await Comment.findAll({ where: conditions });
-        
-        return comments;
+        return await Comment.findAll({ where: conditions });
     }
 };
