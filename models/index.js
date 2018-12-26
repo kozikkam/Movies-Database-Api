@@ -21,11 +21,11 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 const db = {};
 
 const Movie = require('./movie')(sequelize);
-db[Movie.name] = Movie;
+db['Movie'] = Movie;
 const Rating = require('./rating')(sequelize);
-db[Rating.name] = Rating;
+db['Rating'] = Rating;
 const Comment = require('./comment')(sequelize);
-db[Comment.name] = Comment;
+db['Comment'] = Comment;
 Movie.hasMany(Rating, {as: 'ratings'});
 Movie.hasMany(Comment, {as: 'comments'});
 
