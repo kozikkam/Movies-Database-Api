@@ -1,7 +1,6 @@
 const db = require('../models/index');
 const config = require('../config/config');
 
-//Require the dev-dependencies
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
@@ -12,18 +11,11 @@ var mockedReply = require('./mock/mockResponse');
 const movieTitle = mockedReply.Title;
 
 chai.use(chaiHttp);
-//Our parent block
+
 describe('Movies', () => {
     before(done => {
         db.sequelize.sync({force: true}).then(() => done());
     });
-
-    /*beforeEach(done => {
-        nock(config.omdbapi)
-            .get(() => true)
-            .reply(200, mockedReply);
-        done();
-    });*/
 
     describe('/GET movie', () => {
         it('it should GET all the movies', (done) => {
@@ -57,7 +49,7 @@ describe('Movies', () => {
             nock(config.omdbapi)
                 .get(() => true)
                 .reply(200, mockedReply);
-            let movie = {
+            const movie = {
                 title: movieTitle
             }
             chai.request(app)
@@ -73,9 +65,9 @@ describe('Movies', () => {
         });
 
         it('it should return a cached instance', (done) => {
-            let movie = {
+            const movie = {
                 title: movieTitle
-            }
+            };
             chai.request(app)
             .post('/movies')
             .send(movie)
@@ -85,7 +77,10 @@ describe('Movies', () => {
                 assert.isNotEmpty(res.body);
                 assert.property(res.body, 'title');
                 assert.equal(res.body.title, movieTitle);
-                db.movie.findAll().then((result) => {assert.equal(result.length, 1); done()});
+                db.movie.findAll().then((result) => {
+                    assert.equal(result.length, 1);
+                    done();
+                });
             });
         });
 
@@ -95,12 +90,11 @@ describe('Movies', () => {
             nock(config.omdbapi)
                 .get(() => true)
                 .reply(200, mockedReply);
-            let movie = {
+            const movie = {
                 title: movieTitle
             }
             db.movie.findOne({where: {title: movieTitle}}).then(movieObject => {
-                // substract one day from updated at
-                let now = new Date();
+                const now = new Date();
                 db.sequelize.query(
                     'UPDATE movies SET updatedAt=?',
                     { 
