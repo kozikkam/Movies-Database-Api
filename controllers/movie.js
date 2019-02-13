@@ -37,67 +37,75 @@ function getMovieValuesFromData(data){
 }
 
 async function updateOrCreateMovie(title, res, cached=undefined) {
-    let data = await requestJson(config['omdbapi']+`?apikey=${config['developerKey']}&t="${title}"`);
-    let values = getMovieValuesFromData(data);
+    const data = await requestJson(config['omdbapi']+`?apikey=${config['developerKey']}&t="${title}"`);
+    const values = getMovieValuesFromData(data);
+
     if(cached) {
         cached = await cached.update(values);
         res.status(200);
+
         return cached;
-    }
-    else {
+    } else {
         res.status(201);
     }
-    let foundTitle = values.title;
-    if(!foundTitle) {
+
+    const { title } = values;
+
+    if(!title) {
         res.status(400);
         throw new Error("Title does not match any movie");
     }
+
     cached = await Movie.create(values);
     await createAndBindRatingsFromData(cached, data);
-    return await movieFindOne({title: foundTitle});
+
+    return await movieFindOne({ title });
 }
 
 async function createAndBindRatingsFromData(movie, data){
     await movie.setRatings([]);
+
     for(const idx in data["Ratings"]) {
-        let value = {
+        const value = {
             source: data["Ratings"][idx]["Source"],
             value: data["Ratings"][idx]["Value"]
         };
-        let rating = await getOrCreateRating(value, value);
+
+        const rating = await getOrCreateRating(value, value);
         movie.addRating(rating);
     }
 }
 
 module.exports = {
     async create(req, res) {
-        let title = req.body.title;
-        checkForArguments({title}, res);
+        const { title } = req.body;
+        checkForArguments({ title }, res);
 
-        // check if already in database
-        let cached = await movieFindOne({title});
+        const cached = await movieFindOne({title});
+
         if(cached) {
-            // update if entry older than 24 hours
-            console.log(cached.updatedAt);
             if(getHoursDifference(new Date(), cached.updatedAt) > 24) {
                 console.log("returning updated movie");
+
                 return await updateOrCreateMovie(title, res, cached);
             }
             console.log("returning cached movie");
             res.status(200);
+
             return cached;
         }
-        // if not, request
         console.log("returning new movie");
+
         return await updateOrCreateMovie(title, res);
     },
     async list(req, res) {
-        const Op = Sequelize.Op
-        let conditions = {};
+        const { Op } = Sequelize;
+        const conditions = {};
+        
         if(req.query.id) {
             conditions.id = parseInt(req.query.id);
         }
-        // need something better for parsing such arguments
+        
         if(req.query.year) { 
             if(req.query.year.gt || req.query.year.lt) {
                 if(req.query.year.gt){
@@ -111,6 +119,7 @@ module.exports = {
                 conditions.year = parseInt(req.query.year);
             }
         }
+
         return await movieFindAll(conditions);
     }
 };
